@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import useForm from "../../../../common/hooks/useForm";
 import { useAuth } from "../hooks/useAuthLogin";
+import { useEffect } from "react";
 
 export interface LoginFormValues {
   email: string;
@@ -7,6 +9,8 @@ export interface LoginFormValues {
 }
 const LoginFormComponent = () => {
   const { login, status, error } = useAuth();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const validationSchema = {
     email: (value: string) => {
@@ -18,30 +22,30 @@ const LoginFormComponent = () => {
       return null;
     },
   };
-  const {
-    values,
-    handleChange,
-    handleSubmit,
-    resetForm,
-    setValues,
-    setFieldValue,
-    errors,
-  } = useForm<LoginFormValues>(
-    {
-      email: "",
-      password: "",
-    },
-    validationSchema
-  );
+  const { values, handleChange, handleSubmit, resetForm, errors } =
+    useForm<LoginFormValues>(
+      {
+        email: "",
+        password: "",
+      },
+      validationSchema
+    );
 
   const onSubmit = async () => {
     try {
       await login({ email: values.email, password: values.password });
-      // Redirección o manejo de éxito
+      resetForm();
+      navigate("/");
     } catch (err) {
       // El error ya está en authState.error
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <form onSubmit={(event) => handleSubmit(event, onSubmit)}>
@@ -73,10 +77,14 @@ const LoginFormComponent = () => {
               value={values.email}
               id="email"
               onChange={handleChange}
-              placeholder="Correo"
               autoComplete="off"
               className="block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground"
             />
+            {errors.email && (
+              <span className="mb-2 block text-sm font-medium text-red-500">
+                {errors.email}
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -97,6 +105,11 @@ const LoginFormComponent = () => {
                 onChange={handleChange}
                 className="block w-full border-0 bg-transparent p-0 text-sm file:my-1 placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 focus:ring-teal-500 sm:leading-7 text-foreground"
               />
+              {errors.password && (
+                <span className="mb-2 block text-sm font-medium text-red-500">
+                  {errors.password}
+                </span>
+              )}
             </div>
           </div>
         </div>

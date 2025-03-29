@@ -1,23 +1,6 @@
-import { createSelector } from "@reduxjs/toolkit";
+import { RootState } from "../../../../common/redux/store";
 
-const selectAuthState = (state: any) => state.auth;
-
-export const selectCurrentUser = createSelector(
-  selectAuthState,
-  (auth) => auth.user
-);
-
-export const selectAuthStatus = createSelector(
-  selectAuthState,
-  (auth) => auth.status
-);
-
-export const selectAuthError = createSelector(
-  selectAuthState,
-  (auth) => auth.error
-);
-
-export const selectIsAuthenticated = createSelector(
-  selectCurrentUser,
-  (user) => !!user
-);
+export const selectAuthState = (state: RootState) => state.auth;
+export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectIsAuthenticated = (state: RootState) => !!state.auth.user;
+export const selectAuthStatus = (state: RootState) => state.auth.status;

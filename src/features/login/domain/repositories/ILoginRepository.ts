@@ -1,6 +1,6 @@
 import { FireBaseResultDto } from "../models/FireBaseResultDto";
 import { LoginRequestDto } from "../models/LoginRequestDto";
-import { User } from "../models/User";
+import { User } from "../../../users/domain/models/User";
 
 export interface ILoginRepository {
   login(credentials: LoginRequestDto): Promise<FireBaseResultDto>;

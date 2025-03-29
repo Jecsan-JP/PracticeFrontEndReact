@@ -3,7 +3,7 @@ import {
   User as FirebaseUser,
 } from "firebase/auth";
 import { LoginRequestDto } from "../../domain/models/LoginRequestDto";
-import { User } from "../../domain/models/User";
+import { User } from "../../../users/domain/models/User";
 import { ILoginRepository } from "../../domain/repositories/ILoginRepository";
 import { auth } from "../../../../common/config/firebase";
 import { FireBaseResultDto } from "../../domain/models/FireBaseResultDto";

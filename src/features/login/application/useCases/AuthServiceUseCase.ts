@@ -1,13 +1,15 @@
+import { UseCase } from "../../../../common/domain/models/UseCase";
+import { FireBaseResultDto } from "../../domain/models/FireBaseResultDto";
 import { LoginRequestDto } from "../../domain/models/LoginRequestDto";
 import { ILoginRepository } from "../../domain/repositories/ILoginRepository";
 
-export class AuthServiceUseCase {
+export class AuthServiceUseCase
+  implements UseCase<LoginRequestDto, FireBaseResultDto>
+{
   constructor(private loginRepository: ILoginRepository) {}
-
-  async login(credentials: LoginRequestDto) {
-    if (!credentials.email || !credentials.password)
-      throw new Error("Credenciales inválidas");
-    return this.loginRepository.login(credentials);
+  execute(t: LoginRequestDto): Promise<FireBaseResultDto> {
+    if (!t.email || !t.password) throw new Error("Credenciales inválidas");
+    return this.loginRepository.login(t);
   }
 
   async getCurrentUser() {

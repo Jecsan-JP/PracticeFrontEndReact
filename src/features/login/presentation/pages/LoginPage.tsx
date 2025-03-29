@@ -1,8 +1,6 @@
 import LoginFormComponent from "../components/LoginFormComponent";
-import { useAuth } from "../hooks/useAuthLogin";
 
 function LoginPage() {
-  
   return (
     <>
       {/* component */}
