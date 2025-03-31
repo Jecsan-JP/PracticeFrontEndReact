@@ -1,7 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { User } from "../../domain/models/User";
 
-export const ColumnsUsers: ColumnDef<User>[] = [
+export const getColumnsUsers = (
+  onEdit: (user: User) => void,
+  onDelete: (id: number) => void
+): ColumnDef<User>[] => [
   {
     header: "ID",
     accessorKey: "id",
@@ -44,37 +47,21 @@ export const ColumnsUsers: ColumnDef<User>[] = [
   },
   {
     header: "ACCIONES",
-    accessorKey: "actions",
-    cell: (info) => {
-      const rowData = info.row.original;
-
-      return (
-        <div className="flex space-x-2">
-          <button
-            onClick={() => {
-              const modal = document.getElementById(
-                "modalUser"
-              ) as HTMLDialogElement;
-              modal?.showModal();
-              // Aquí deberías tener tu lógica para setear el usuario a editar
-              // userBloc.setUser(rowData);
-            }}
-            className="btn btn-primary"
-          >
-            Editar
-          </button>
-          <button
-            onClick={() => {
-              // swalDataManager().deleteItem("el usuario", async () => {
-              //   await userBloc.deleteUser(rowData.id);
-              // });
-            }}
-            className="btn btn-danger"
-          >
-            Eliminar
-          </button>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="flex space-x-2">
+        <button
+          onClick={() => onEdit(row.original)}
+          className="btn btn-primary btn-sm"
+        >
+          Editar
+        </button>
+        <button
+          onClick={() => onDelete(row.original.id)}
+          className="btn btn-error btn-sm"
+        >
+          Eliminar
+        </button>
+      </div>
+    ),
   },
 ];

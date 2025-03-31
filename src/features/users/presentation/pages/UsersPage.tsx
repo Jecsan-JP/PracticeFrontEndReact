@@ -1,16 +1,41 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TablePaginationsComponent from "../../../../common/react-table/table/components/TablePaginationsComponent";
-import { ColumnsUsers } from "../components/ColumnUsers";
+// import { ColumnsUsers } from "../components/ColumnUsers";
 import { useUsersRedux } from "../hooks/useUsersRedux";
+import ModalWidthComponent from "../../../../common/presentation/components/modals/ModalWidthComponent";
+import { useDialog } from "../../../../common/hooks/useDialog";
+import { User } from "../../domain/models/User";
+import { UserForm } from "../components/forms/UserForm";
+import { getColumnsUsers } from "../components/ColumnUsers";
 
 const UsersPage = () => {
   const { users, isLoading, getUsers } = useUsersRedux();
+  const { showModal, closeModal } = useDialog("modalUser");
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+
+  // Función para manejar edición
+  const handleEdit = (user: User) => {
+    setEditingUser(user);
+    showModal();
+  };
+
+  // Función para manejar eliminación
+  const handleDelete = (id: number) => {
+    if (confirm("¿Estás seguro de eliminar este usuario?")) {
+      // userBloc.deleteUser(id); // Usa tu lógica de eliminación
+    }
+  };
+  const columns = useMemo(() => getColumnsUsers(handleEdit, handleDelete), []);
 
   useEffect(() => {
     getUsers();
   }, []);
 
-  const memoizedColums = useMemo(() => ColumnsUsers, []);
+  const handleCreateClick = () => {
+    setEditingUser(null);
+    showModal();
+  };
+
   return (
     <>
       {" "}
@@ -34,13 +59,7 @@ const UsersPage = () => {
       <div className="divider m-0 divider-primary"></div>
       <div className="mb-4 flex justify-end">
         <button
-          onClick={() => {
-            const modal = document.getElementById(
-              "modalUser"
-            ) as HTMLDialogElement;
-
-            modal?.showModal();
-          }}
+          onClick={handleCreateClick}
           className="btn btn-primary mt-4 rounded-lg px-4 py-2 text-white "
         >
           Agregar
@@ -48,9 +67,16 @@ const UsersPage = () => {
       </div>
       <TablePaginationsComponent
         data={users || []}
-        columns={memoizedColums}
+        columns={columns}
         totalRows={users?.length || 0}
       />
+      <ModalWidthComponent id="modalUser">
+        <UserForm
+          user={editingUser || undefined}
+          onClose={closeModal}
+          onSuccess={closeModal}
+        />
+      </ModalWidthComponent>
     </>
   );
 };
