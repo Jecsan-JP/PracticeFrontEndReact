@@ -1,4 +1,16 @@
+import { useEffect, useMemo } from "react";
+import TablePaginationsComponent from "../../../../common/react-table/table/components/TablePaginationsComponent";
+import { ColumnsUsers } from "../components/ColumnUsers";
+import { useUsersRedux } from "../hooks/useUsersRedux";
+
 const UsersPage = () => {
+  const { users, isLoading, getUsers } = useUsersRedux();
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  const memoizedColums = useMemo(() => ColumnsUsers, []);
   return (
     <>
       {" "}
@@ -20,6 +32,25 @@ const UsersPage = () => {
         Usuarios
       </h1>
       <div className="divider m-0 divider-primary"></div>
+      <div className="mb-4 flex justify-end">
+        <button
+          onClick={() => {
+            const modal = document.getElementById(
+              "modalUser"
+            ) as HTMLDialogElement;
+
+            modal?.showModal();
+          }}
+          className="btn btn-primary mt-4 rounded-lg px-4 py-2 text-white "
+        >
+          Agregar
+        </button>
+      </div>
+      <TablePaginationsComponent
+        data={users || []}
+        columns={memoizedColums}
+        totalRows={users?.length || 0}
+      />
     </>
   );
 };

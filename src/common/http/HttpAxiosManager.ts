@@ -91,9 +91,10 @@ class HttpAxiosManager implements HttpManager {
         params: queryParams,
         headers: {
           ...headers,
-          ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
+          // ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
         },
       });
+
       return this.resolveResponse<T>(response);
     } catch (error) {
       return this.handleError(error);
@@ -111,7 +112,8 @@ class HttpAxiosManager implements HttpManager {
 
   private resolveResponse<T>(response: AxiosResponse<any>): T {
     const baseResponse = response.data as BaseResponseDto<T>;
-    return baseResponse.data as T;
+
+    return baseResponse as T;
   }
 
   private async handleError(error: unknown): Promise<never> {

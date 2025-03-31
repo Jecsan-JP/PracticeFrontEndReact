@@ -5,4 +5,12 @@ export default {
     extend: {},
   },
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      "light", // Puedes mantener otros temas de DaisyUI
+      "retro",
+      "cupcake",
+      "aqua",
+    ],
+  },
 };

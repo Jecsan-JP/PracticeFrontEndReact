@@ -61,12 +61,10 @@ export const login =
 
 export const checkAuth = () => async (dispatch: AppDispatch) => {
   try {
-    console.log("checkAuth iniciado"); // Debug
     const storedAuth = localStorage.getItem("auth");
 
     if (storedAuth) {
       const user = JSON.parse(storedAuth);
-      console.log("Usuario encontrado en localStorage:", user); // Debug
       dispatch(setCredentials(user)); // Actualiza el estado de Redux
     } else {
       console.log("No hay usuario en localStorage"); // Debug

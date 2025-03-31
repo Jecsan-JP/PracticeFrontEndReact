@@ -39,7 +39,7 @@ const userSlice = createSlice({
       }
     },
     removeUser: (state, action: PayloadAction<number>) => {
-      state.users = state.users.filter((user) => user.id !== action.payload)
+      state.users = state.users.filter((user) => user.id !== action.payload);
     },
     setError: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
@@ -54,20 +54,18 @@ const userSlice = createSlice({
 
 // Acciones asíncronas usando los useCases
 export const fetchUsers = () => async (dispatch: AppDispatch) => {
-    try {
-      dispatch(setLoading());
-      const { getUsersUseCase } = container;
-      const users = await getUsersUseCase.execute();
-      dispatch(setUsers(users));
-    } catch (error: any) {
-      dispatch(setError(error.message));
-      swalDataManager().showErrorMessage(
-        "Error al cargar usuarios",
-        error
-      );
-    }
-  };
-  
+  try {
+    dispatch(setLoading());
+    const { getUsersUseCase } = container;
+    const users = await getUsersUseCase.execute();
+    console.log("Depuracion users", users);
+    dispatch(setUsers(users));
+  } catch (error: any) {
+    dispatch(setError(error.message));
+    swalDataManager().showErrorMessage("Error al cargar usuarios", error);
+  }
+};
+
 //   export const createUser = (userData: Omit<User, "id">) => async (dispatch: AppDispatch) => {
 //     try {
 //       dispatch(setLoading());
@@ -85,7 +83,7 @@ export const fetchUsers = () => async (dispatch: AppDispatch) => {
 //       throw error;
 //     }
 //   };
-  
+
 //   export const editUser = (id: string, userData: Partial<User>) => async (dispatch: AppDispatch) => {
 //     try {
 //       dispatch(setLoading());
@@ -103,7 +101,7 @@ export const fetchUsers = () => async (dispatch: AppDispatch) => {
 //       throw error;
 //     }
 //   };
-  
+
 //   export const deleteUser = (id: string) => async (dispatch: AppDispatch) => {
 //     try {
 //       dispatch(setLoading());
@@ -121,15 +119,15 @@ export const fetchUsers = () => async (dispatch: AppDispatch) => {
 //     }
 //   };
 
-  export const { 
-    setUsers, 
-    setCurrentUser, 
-    addUser, 
-    updateUser, 
-    removeUser, 
-    setError, 
-    setLoading,
-    resetUserState
-  } = userSlice.actions;
-  
-  export default userSlice.reducer;
+export const {
+  setUsers,
+  setCurrentUser,
+  addUser,
+  updateUser,
+  removeUser,
+  setError,
+  setLoading,
+  resetUserState,
+} = userSlice.actions;
+
+export default userSlice.reducer;
