@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../../../common/redux/store";
+import { CreateUserDto } from "../../../login/domain/models/CreateUserDto";
 import { User } from "../../domain/models/User";
 import {
   selectAllUsers,
@@ -8,6 +9,7 @@ import {
 } from "../redux/selectorsUsers";
 import {
   addUser,
+  createUser,
   fetchUsers,
   removeUser,
   updateUser,
@@ -19,7 +21,7 @@ interface UseUsersReduxReturn {
   status: "idle" | "loading" | "succeded" | "failed";
   error: string | null;
   getUsers: () => void;
-  createUser: (userData: User) => void;
+  createUser: (data: CreateUserDto) => void;
   updateUser: (user: User) => void;
   deleteUser: (userId: number) => void;
   getUserById: (userId: number) => User | undefined;
@@ -41,7 +43,7 @@ export const useUsersRedux = (): UseUsersReduxReturn => {
     status,
     error,
     getUsers: () => dispatch(fetchUsers()),
-    createUser: (userData: User) => dispatch(addUser(userData)),
+    createUser: (data: CreateUserDto) => dispatch(createUser(data)),
     updateUser: (user: User) => dispatch(updateUser(user)),
     deleteUser: (userId: number) => dispatch(removeUser(userId)),
     getUserById: (userId: number) => users.find((user) => user.id === userId),

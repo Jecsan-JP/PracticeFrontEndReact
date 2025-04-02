@@ -65,11 +65,15 @@ const UsersPage = () => {
           Agregar
         </button>
       </div>
-      <TablePaginationsComponent
-        data={users || []}
-        columns={columns}
-        totalRows={users?.length || 0}
-      />
+      {isLoading ? (
+        <label>Cargando...</label>
+      ) : (
+        <TablePaginationsComponent
+          data={users || []}
+          columns={columns}
+          totalRows={users?.length || 0}
+        />
+      )}
       <ModalWidthComponent id="modalUser">
         <UserForm
           user={editingUser || undefined}

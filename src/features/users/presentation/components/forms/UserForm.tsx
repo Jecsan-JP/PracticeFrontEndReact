@@ -1,29 +1,5 @@
-import { useEffect, useState } from "react";
-import useForm from "../../../../../common/hooks/useForm";
 import { User } from "../../../domain/models/User";
-
-interface UserFormValues {
-  // Datos básicos
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  password?: string;
-  phone: string;
-  website: string;
-  // Dirección (aplanada)
-  street: string;
-  suite: string;
-  city: string;
-  zipcode: string;
-  // Geo (aplanado)
-  lat: string;
-  lng: string;
-  // Compañía (aplanada)
-  companyName: string;
-  catchPhrase: string;
-  bs: string;
-}
+import { useUserForm } from "../../hooks/useUserForm";
 
 interface UserFormProps {
   user?: User;
@@ -31,138 +7,16 @@ interface UserFormProps {
   onSuccess?: () => void;
 }
 
-const DEFAULT_USER_VALUES = {
-  id: 0,
-  name: "",
-  username: "",
-  email: "",
-  password: "",
-  phone: "",
-  website: "",
-
-  // Address (aplanado)
-  street: "",
-  suite: "",
-  city: "",
-  zipcode: "",
-
-  // Geo (aplanado)
-  lat: "",
-  lng: "",
-
-  // Company (aplanado)
-  companyName: "",
-  catchPhrase: "",
-  bs: "",
-};
-
-const VALIDATION_SCHEMA = {
-  name: (value: string) => {
-    if (!value.trim()) return "El nombre es obligatorio";
-    if (value.length < 4) return "Mínimo 2 caracteres";
-    return null;
-  },
-  username: (value: string) => {
-    if (!value.trim()) return "El usuario es obligatorio";
-    if (value.length < 4) return "Mínimo 4 caracteres";
-    if (!/^[a-zA-Z0-9_]+$/.test(value)) return "Solo letras, números y _";
-    return null;
-  },
-  email: (value: string) => {
-    if (!value.trim()) return "El email es obligatorio";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email inválido";
-    return null;
-  },
-  password: (value: string) => {
-    if (!value.trim()) return "La contraseña es obligatoria";
-    if (value.length < 8) return "Mínimo 8 caracteres";
-    if (!/[A-Z]/.test(value)) return "Debe tener al menos 1 mayúscula";
-    if (!/[0-9]/.test(value)) return "Debe tener al menos 1 número";
-    return null;
-  },
-  // Campos no requeridos pero con validación opcional:
-  phone: (value: string) => {
-    if (value && !/^[\d\s()+-]+$/.test(value)) return "Teléfono inválido";
-    return null;
-  },
-  zipcode: (value: string) => {
-    if (value && !/^\d{5}(-\d{4})?$/.test(value))
-      return "Código postal inválido";
-    return null;
-  },
-};
-
-const flattenUser = (user: User) => ({
-  ...user,
-  street: user.address.street,
-  suite: user.address.suite,
-  city: user.address.city,
-  zipcode: user.address.zipcode,
-  lat: user.address.geo.lat,
-  lng: user.address.geo.lng,
-  companyName: user.company.name,
-  catchPhrase: user.company.catchPhrase,
-  bs: user.company.bs,
-  password: "",
-});
-
 export const UserForm = ({ user, onClose, onSuccess }: UserFormProps) => {
-  const isEditing = !!user;
-  const [initialized, setInitialized] = useState(false);
-
-  // Convertir UserFormValues a User (reconstruir)
-  // const unflattenUser = (form: UserFormValues): User => ({
-  //   ...form,
-  //   address: {
-  //     street: form.street,
-  //     suite: form.suite,
-  //     city: form.city,
-  //     zipcode: form.zipcode,
-  //     geo: {
-  //       lat: form.lat,
-  //       lng: form.lng,
-  //     },
-  //   },
-  //   company: {
-  //     name: form.companyName,
-  //     catchPhrase: form.catchPhrase,
-  //     bs: form.bs,
-  //   },
-  // });
-
   const {
     values,
     errors,
     handleChange,
     handleSubmit,
-    isSubmitting,
-    setValues,
-    resetForm,
-  } = useForm<UserFormValues>(DEFAULT_USER_VALUES, VALIDATION_SCHEMA);
-
-  // Adaptamos el onSubmit para usar el handleSubmit del hook
-  const onSubmit = (callback: () => void) => {
-    if (isEditing) {
-      // Lógica para editar
-      console.log("Editando usuario:", values);
-      // await updateUser(values);
-    } else {
-      // Lógica para crear
-      console.log("Creando usuario:", values);
-      // await createUser(values);
-    }
-    onSuccess?.();
-    callback();
-  };
-
-  useEffect(() => {
-    if (isEditing && user) {
-      setValues({ ...flattenUser(user), password: "" });
-      setInitialized(true); // Esto solo asegura que no se vuelve a inicializar si ya se hizo antes
-    } else {
-      setValues(DEFAULT_USER_VALUES); // Resetear los valores si no estás editando un usuario
-    }
-  }, [user]);
+    isEditing,
+    onSubmit,
+    isLoading,
+  } = useUserForm(user, onSuccess);
 
   return (
     <form
@@ -408,12 +262,8 @@ export const UserForm = ({ user, onClose, onSuccess }: UserFormProps) => {
         <button type="button" onClick={onClose} className="btn btn-ghost">
           Cancelar
         </button>
-        <button
-          type="submit"
-          className="btn btn-primary"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (
+        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+          {isLoading ? (
             <>
               <span className="loading loading-spinner"></span>
               Procesando...

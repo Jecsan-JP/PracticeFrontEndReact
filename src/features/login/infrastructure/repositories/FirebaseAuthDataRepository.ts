@@ -1,6 +1,8 @@
 import {
   signInWithEmailAndPassword,
   User as FirebaseUser,
+  createUserWithEmailAndPassword,
+  UserCredential,
 } from "firebase/auth";
 import { LoginRequestDto } from "../../domain/models/LoginRequestDto";
 import { User } from "../../../users/domain/models/User";
@@ -25,9 +27,21 @@ export class FirebaseAuthDataRepository implements ILoginRepository {
     );
     return this.toDomainUser(userCredential.user);
   }
-  register(email: string, password: string): Promise<User> {
-    throw new Error("Method not implemented.");
+
+  async register(email: string, password: string): Promise<UserCredential> {
+    try {
+      return await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error: any) {
+      if (error.code === "auth/email-already-in-use") {
+        console.error("El correo ya está en uso.");
+        throw new Error("Este correo ya está registrado. Usa otro.");
+      } else {
+        console.error("Error al registrar usuario en Firebase:", error.message);
+        throw new Error("No se pudo registrar el usuario en Firebase.");
+      }
+    }
   }
+
   logout(): Promise<void> {
     throw new Error("Method not implemented.");
   }

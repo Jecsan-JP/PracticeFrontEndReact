@@ -7,6 +7,7 @@ export class AuthServiceUseCase
   implements UseCase<LoginRequestDto, FireBaseResultDto>
 {
   constructor(private loginRepository: ILoginRepository) {}
+  
   execute(t: LoginRequestDto): Promise<FireBaseResultDto> {
     if (!t.email || !t.password) throw new Error("Credenciales inválidas");
     return this.loginRepository.login(t);

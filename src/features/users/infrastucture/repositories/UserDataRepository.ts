@@ -14,7 +14,10 @@ export class UserDataRepository implements IUserRepository {
     throw new Error("Method not implemented.");
   }
   createUser(user: User): Promise<User> {
-    throw new Error("Method not implemented.");
+    return this.http.post<User>({
+      endpoint: "/users",
+      body: user,
+    });
   }
   updateUser(user: User): Promise<User> {
     throw new Error("Method not implemented.");

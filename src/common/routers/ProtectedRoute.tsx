@@ -5,14 +5,14 @@ import { useAppSelector } from "../redux/store";
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, status } = useAppSelector((state) => state.auth);
 
-  console.log("ProtectedRoute - Estado actual:", { user, status });
+  // console.log("ProtectedRoute - Estado actual:", { user, status });
 
   if (status === "loading") {
     return <div>Cargando...</div>;
   }
 
   if (!user) {
-    console.log("Redirigiendo a /login");
+    // console.log("Redirigiendo a /login");
     return <Navigate to="/login" replace />;
   }
 
