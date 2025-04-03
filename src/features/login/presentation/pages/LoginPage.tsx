@@ -3,6 +3,7 @@ import LoginFormComponent from "../components/LoginFormComponent";
 function LoginPage() {
   return (
     <>
+    {/* cambio para que se haga el deploy */}
       {/* component */}
       <div className="bg-primary text-white flex min-h-screen flex-col items-center pt-16 sm:justify-center sm:pt-0">
         <a href="https://dalefon.mx">
