@@ -52,3 +52,24 @@ export default tseslint.config({
   },
 })
 ```
+# React + TypeScript + Vite
+
+Este proyecto es una configuración mínima para ejecutar una aplicación en **React** con **TypeScript** y **Vite**, utilizando **HMR** (Hot Module Replacement) y algunas reglas de **ESLint**.
+
+## Guía de Instalación y Ejecución Local
+
+Sigue los pasos a continuación para correr este proyecto en tu máquina local.
+
+### 1. Clona el Repositorio
+
+Primero, clona el repositorio en tu máquina local:
+
+```bash
+git clone <URL_DEL_REPOSITORIO>
+
+# 2. Instala las Dependencias
+cd nombre-del-repositorio
+npm install
+# 3. Configura las Variables de Entorno (pidelas con el creador del proyecto)
+# 4. Ejecuta el Proyecto
+npm run dev
