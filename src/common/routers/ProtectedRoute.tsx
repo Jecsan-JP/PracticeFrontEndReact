@@ -7,10 +7,6 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   // console.log("ProtectedRoute - Estado actual:", { user, status });
 
-  if (status === "loading") {
-    return <div>Cargando...</div>;
-  }
-
   if (!user) {
     // console.log("Redirigiendo a /login");
     return <Navigate to="/login" replace />;
