@@ -22,11 +22,10 @@ export class CreateUserUseCase implements UseCase<CreateUserDto, User> {
 
     //Intentar crear el usuario en la base de datos
     try {
-      console.log("Json User", data.user);
       return await this.userRepository.createUser(data.user);
     } catch (error) {
-      console.error("Error al registrar usuario en la base de datos:", error);
-      throw new Error("No se pudo registrar el usuario en la base de datos.");
+      console.error("Error al registrar usuario.", error);
+      throw new Error("No se pudo registrar el usuario.");
     }
   }
 }

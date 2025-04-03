@@ -8,11 +8,10 @@ import {
   selectUsersStatus,
 } from "../redux/selectorsUsers";
 import {
-  addUser,
   createUser,
+  deleteUser,
+  editUser,
   fetchUsers,
-  removeUser,
-  updateUser,
 } from "../redux/UserSlice";
 
 interface UseUsersReduxReturn {
@@ -44,8 +43,8 @@ export const useUsersRedux = (): UseUsersReduxReturn => {
     error,
     getUsers: () => dispatch(fetchUsers()),
     createUser: (data: CreateUserDto) => dispatch(createUser(data)),
-    updateUser: (user: User) => dispatch(updateUser(user)),
-    deleteUser: (userId: number) => dispatch(removeUser(userId)),
+    updateUser: (user: User) => dispatch(editUser(user)),
+    deleteUser: (userId: number) => dispatch(deleteUser(userId)),
     getUserById: (userId: number) => users.find((user) => user.id === userId),
     isEmpty: users.length === 0,
     isLoading: status === "loading",

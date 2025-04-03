@@ -56,7 +56,7 @@ export const getColumnsUsers = (
           Editar
         </button>
         <button
-          onClick={() => onDelete(row.original.id)}
+          onClick={() => onDelete(row.original.id ?? 0)}
           className="btn btn-error btn-sm"
         >
           Eliminar

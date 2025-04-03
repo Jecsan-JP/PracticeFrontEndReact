@@ -7,9 +7,10 @@ import { useDialog } from "../../../../common/hooks/useDialog";
 import { User } from "../../domain/models/User";
 import { UserForm } from "../components/forms/UserForm";
 import { getColumnsUsers } from "../components/ColumnUsers";
+import { swalDataManager } from "../../../../common/presentation/di/di_frameworks";
 
 const UsersPage = () => {
-  const { users, isLoading, getUsers } = useUsersRedux();
+  const { users, isLoading, getUsers, deleteUser } = useUsersRedux();
   const { showModal, closeModal } = useDialog("modalUser");
   const [editingUser, setEditingUser] = useState<User | null>(null);
 
@@ -21,9 +22,11 @@ const UsersPage = () => {
 
   // Función para manejar eliminación
   const handleDelete = (id: number) => {
-    if (confirm("¿Estás seguro de eliminar este usuario?")) {
-      // userBloc.deleteUser(id); // Usa tu lógica de eliminación
-    }
+    swalDataManager().deleteItem("el usuario", async () => {
+      if (id !== 0) {
+        await deleteUser(id);
+      }
+    });
   };
   const columns = useMemo(() => getColumnsUsers(handleEdit, handleDelete), []);
 

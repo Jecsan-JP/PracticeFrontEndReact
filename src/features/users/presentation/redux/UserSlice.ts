@@ -84,10 +84,7 @@ export const createUser =
         user: user,
         password: data.password,
       } as CreateUserDto);
-      console.log(
-        "Después de ejecutar el use case respuesta del ws create user",
-        newUser
-      );
+
       dispatch(addUser(newUser));
       dispatch(setStatus("succeded"));
       swalDataManager().showSuccesMessage(
@@ -103,40 +100,49 @@ export const createUser =
     }
   };
 
-//   export const editUser = (id: string, userData: Partial<User>) => async (dispatch: AppDispatch) => {
-//     try {
-//       dispatch(setLoading());
-//       const { getUsersUseCase } = container;
-//       const updatedUser = await getUsersUseCase.updateUser(id, userData);
-//       dispatch(updateUser(updatedUser));
-//       swalDataManager().showSuccessMessage("Usuario actualizado exitosamente");
-//       return updatedUser;
-//     } catch (error: any) {
-//       dispatch(setError(error.message));
-//       swalDataManager().showErrorMessage(
-//         "Error al actualizar usuario",
-//         error
-//       );
-//       throw error;
-//     }
-//   };
+export const editUser = (user: User) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(setLoading());
+    const { updateUserUseCase } = container;
+    const updatedUser = await updateUserUseCase.execute(user);
+    dispatch(updateUser(updatedUser));
+    dispatch(setStatus("succeded"));
 
-//   export const deleteUser = (id: string) => async (dispatch: AppDispatch) => {
-//     try {
-//       dispatch(setLoading());
-//       const { getUsersUseCase } = container;
-//       await getUsersUseCase.deleteUser(id);
-//       dispatch(removeUser(id));
-//       swalDataManager().showSuccesMessage("Exito!","Usuario eliminado exitosamente");
-//     } catch (error: any) {
-//       dispatch(setError(error.message));
-//       swalDataManager().showErrorMessage(
-//         "Error al eliminar usuario",
-//         error
-//       );
-//       throw error;
-//     }
-//   };
+    swalDataManager().showSuccesMessage(
+      "Exito!",
+      "Usuario actualizado exitosamente"
+    );
+    return updatedUser;
+  } catch (error: any) {
+    dispatch(setStatus("failed"));
+    dispatch(setError(error.message));
+    swalDataManager().showErrorMessage(
+      "Error!!",
+      "Error al actualizar usuario" + error
+    );
+    throw error;
+  }
+};
+
+export const deleteUser = (id: number) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(setLoading());
+    const { deleteUserUseCase } = container;
+    await deleteUserUseCase.execute(id);
+    dispatch(removeUser(id));
+    dispatch(setStatus("succeded"));
+
+    swalDataManager().showSuccesMessage(
+      "Exito!",
+      "Usuario eliminado exitosamente"
+    );
+  } catch (error: any) {
+    dispatch(setError(error.message));
+    dispatch(setStatus("failed"));
+    swalDataManager().showErrorMessage("Error al eliminar usuario", error);
+    throw error;
+  }
+};
 
 export const {
   setUsers,

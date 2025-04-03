@@ -80,7 +80,7 @@ const unflattenUser = (form: UserFormValues): User => ({
 export const useUserForm = (user?: User, onSuccess?: () => void) => {
   const isEditing = !!user;
   const validationSchema = getUserValidationSchema(isEditing);
-  const { createUser, isLoading } = useUsersRedux();
+  const { createUser, isLoading, updateUser } = useUsersRedux();
 
   const {
     values,
@@ -103,7 +103,7 @@ export const useUserForm = (user?: User, onSuccess?: () => void) => {
     const userToSubmit = unflattenUser(values);
 
     if (isEditing) {
-      console.log("Editando usuario:", values);
+      updateUser(userToSubmit);
     } else {
       createUser({
         user: userToSubmit,

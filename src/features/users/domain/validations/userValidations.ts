@@ -22,10 +22,10 @@ export const getUserValidationSchema = (isEditing: boolean) => ({
     if (!/[0-9]/.test(value)) return "Debe tener al menos 1 número";
     return null;
   },
-  phone: (value: string) => {
-    if (value && !/^[\d\s()+-]+$/.test(value)) return "Teléfono inválido";
-    return null;
-  },
+  // phone: (value: string) => {
+  //   if (value && !/^[\d\s()+-]+$/.test(value)) return "Teléfono inválido";
+  //   return null;
+  // },
   zipcode: (value: string) => {
     if (value && !/^\d{5}(-\d{4})?$/.test(value))
       return "Código postal inválido";

@@ -10,19 +10,28 @@ export class UserDataRepository implements IUserRepository {
       endpoint: "/users",
     });
   }
+
   getUsersById(idUser: number): Promise<User> {
     throw new Error("Method not implemented.");
   }
+
   createUser(user: User): Promise<User> {
     return this.http.post<User>({
       endpoint: "/users",
       body: user,
     });
   }
+
   updateUser(user: User): Promise<User> {
-    throw new Error("Method not implemented.");
+    return this.http.put<User>({
+      endpoint: `/users/${user.id}`,
+      body: user,
+    });
   }
+
   deleteUser(idUser: number): Promise<boolean> {
-    throw new Error("Method not implemented.");
+    return this.http.delete<boolean>({
+      endpoint: `/users/${idUser}`,
+    });
   }
 }
