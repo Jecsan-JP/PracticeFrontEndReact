@@ -3,7 +3,7 @@ import { useAppSelector } from "../redux/store";
 
 // ProtectedRoute.tsx
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, status } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
 
   // console.log("ProtectedRoute - Estado actual:", { user, status });
 

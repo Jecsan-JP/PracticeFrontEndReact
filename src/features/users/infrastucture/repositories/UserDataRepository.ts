@@ -11,9 +11,9 @@ export class UserDataRepository implements IUserRepository {
     });
   }
 
-  getUsersById(idUser: number): Promise<User> {
-    throw new Error("Method not implemented.");
-  }
+  // getUsersById(idUser: number): Promise<User> {
+  //   throw new Error("Method not implemented.");
+  // }
 
   createUser(user: User): Promise<User> {
     return this.http.post<User>({
